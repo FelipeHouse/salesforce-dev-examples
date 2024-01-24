@@ -1,0 +1,43 @@
+<template>
+    <lightning-card variant="base" title={title} icon-name={cardIconName}>
+        <div class="slds-p-left_medium slds-p-right_medium">
+            <div>
+                <template if:true={isViewMode}>
+                    <lightning-record-view-form object-api-name={objectApiName} record-id={recordId}>
+                        <template for:each={formFields} for:item="field" for:index="index">
+                            <lightning-output-field class="slds-border_bottom" key={field.apiName}
+                                field-name={field.apiName}></lightning-output-field>
+                        </template>
+                        <lightning-button class="slds-align_absolute-center slds-m-top_small" label="Editar"
+                            onclick={handleEditClick}></lightning-button>
+                    </lightning-record-view-form>
+                </template>
+
+                <template if:true={isEditMode}>
+                    <lightning-record-edit-form object-api-name={objectApiName} record-id={recordId}
+                        onsubmit={handleSubmit} onsuccess={handleSuccess} onerror={handleErrors}>
+                        <template for:each={formFields} for:item="field" for:index="index">
+                            <c-tab-combobox key={field.apiName} field-label={field.label} field-name={field.apiName}
+                                data-name={field.apiName} onselect={handleOnSelect} onrefresh={handleOnRefresh}
+                                tab-records={tabOptions}>
+                            </c-tab-combobox>
+                        </template>
+
+                        <div class="slds-align_absolute-center slds-m-top_small">
+                            <lightning-button label="Cancelar"
+                                class="slds-m-left_medium slds-m-top_small slds-m-bottom_xx-small"
+                                onclick={handleCancelClick}></lightning-button>
+                            <lightning-button label="Salvar"
+                                class="slds-m-left_medium slds-m-top_small slds-m-bottom_xx-small" type="submit"
+                                variant="brand"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </template>
+
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>
